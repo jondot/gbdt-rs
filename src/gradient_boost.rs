@@ -766,6 +766,14 @@ impl GBDT {
         let single_line = all_lines.join("");
         let json_obj: serde_json::Value = serde_json::from_str(&single_line)?;
 
+        GBDT::from_xgboost_dump_json(json_obj, objective, base_score)
+    }
+
+    pub fn from_xgboost_dump_json(
+        json_obj: serde_json::Value,
+        objective: &str,
+        base_score: f32,
+    ) -> Result<Self, Box<dyn Error>> {
         let nodes = json_obj.as_array().ok_or("parse trees error")?;
 
         let mut cfg = Config::new();
